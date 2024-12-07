@@ -15,5 +15,8 @@ public interface ServicioCredenciales {
 
     // Guarda las credenciales de un usuario.
     String GuardarCredenciales(Long idPersona, Credenciales credenciales);
+
+    //Método para obtener las credenciales autenticadas
+	Credenciales obtenerCredencialesAutenticadas(String usuario, String password);
     
 }

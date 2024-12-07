@@ -84,5 +84,13 @@ public class ServicioCredencialesImpl implements ServicioCredenciales {
         }
     }
     
+    @Override
+    public Credenciales obtenerCredencialesAutenticadas(String usuario, String password) {
+        return credencialesRepo.findByUsuario(usuario)
+                .filter(cred -> cred.getPassword().equals(password)) // Comparación directa de contraseñas
+                .orElseThrow(() -> new RuntimeException("Credenciales inválidas."));
+    }
+
+    
 }
 

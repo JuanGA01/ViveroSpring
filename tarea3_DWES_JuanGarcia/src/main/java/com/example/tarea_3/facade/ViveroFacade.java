@@ -1,9 +1,25 @@
 package com.example.tarea_3.facade;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import com.example.tarea_3.modelo.Credenciales;
+import com.example.tarea_3.modelo.Ejemplar;
+import com.example.tarea_3.modelo.Mensaje;
 import com.example.tarea_3.modelo.Persona;
+import com.example.tarea_3.modelo.Planta;
+import com.example.tarea_3.servicio.ServicioCredenciales;
+import com.example.tarea_3.servicio.ServicioEjemplar;
+import com.example.tarea_3.servicio.ServicioMensaje;
+import com.example.tarea_3.servicio.ServicioPersona;
+import com.example.tarea_3.servicio.ServicioPlanta;
+import com.example.tarea_3.utilidades.Utilities;
 
+@Component
 public class ViveroFacade {
 
 	//El portal es estático
@@ -12,16 +28,21 @@ public class ViveroFacade {
 	//El scaner lo reciclaré para cada interacción con el usuario
 	Scanner scanner = new Scanner(System.in);
 
-	//Instancio las factorías
-	MySqlDAOFactory factoriaDAO = MySqlDAOFactory.getCon();
-	ViveroServiciosFactory factoriaServicios = ViveroServiciosFactory.getServicios(); 
-
 	//Servicios
-	ServicioPlanta plantServ = factoriaServicios.getServiciosPlanta();
-	ServicioCredenciales credencialesServ = factoriaServicios.getServiciosCredenciales();
-	ServicioPersona personaServ = factoriaServicios.getServiciosPersona();
-	ServicioEjemplar ejemplarServ = factoriaServicios.getServicioEjemplar();
-	ServicioMensaje mensajeServ = factoriaServicios.getServicioMensaje();
+	@Autowired
+	ServicioPlanta plantServ;
+	
+	@Autowired
+	ServicioCredenciales credencialesServ;
+	 
+	@Autowired
+	ServicioPersona personaServ;
+	
+	@Autowired
+	ServicioEjemplar ejemplarServ;
+	
+	@Autowired
+	ServicioMensaje mensajeServ;
 
 	//Método para instanciar el portal
 	public static ViveroFacade getPortal() {
@@ -198,8 +219,8 @@ public class ViveroFacade {
 		System.out.println(credencialesServ.loginUsuario(usuario, password));
 		if(credencialesServ.UsuarioCorrecto(usuario, password) && usuario.equals("admin")) {
 			menuAdmin();
-		}else if(credencialesServ.UsuarioCorrecto(usuario, password) && !usuario.equals("admin")){
-			menuPersonal(factoriaDAO.getPersonaDAO().findById(factoriaDAO.getCredencialesDAO().obtenerCredencialesAutenticadas(usuario, password).getId()));
+		}else if(credencialesServ.UsuarioCorrecto(usuario, password) && !usuario.equals("admin")){          
+            menuPersonal(personaServ.findById(credencialesServ.obtenerCredencialesAutenticadas(usuario, password).getId()));
 		}
 	}
 
@@ -366,7 +387,7 @@ public class ViveroFacade {
 		do {
 			persona = new Persona();
 			persona.setId(Utilities.pedirLong(scanner.nextLine(), scanner));
-			persona = factoriaDAO.getPersonaDAO().findById(persona.getId());
+			persona = personaServ.findById(persona.getId());
 			if (persona == null) {
 				System.out.println("Introduce un código válido: ");
 			}

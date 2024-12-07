@@ -11,6 +11,12 @@ public class ServicioPersonaImpl implements ServicioPersona {
 
     @Autowired
     private PersonaRepositorio personaRepo;
+    
+    @Override
+    public Persona findById(Long id) {
+        return personaRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Persona no encontrada con ID: " + id));
+    }
 
     @Override
     public Boolean CorreoExistente(Persona persona) {
