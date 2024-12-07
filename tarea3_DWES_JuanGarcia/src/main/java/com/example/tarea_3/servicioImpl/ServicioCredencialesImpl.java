@@ -83,8 +83,6 @@ public class ServicioCredencialesImpl implements ServicioCredenciales {
             return "Error: El usuario ya existe.";
         }
     }
-
-    
     
 }
 

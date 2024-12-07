@@ -11,9 +11,6 @@ public interface ServicioMensaje {
     // Crea un nuevo mensaje asociado a una persona y un ejemplar.
     String crearMensaje(Persona persona, Ejemplar ejemplar, Mensaje mensaje);
 
-    // Obtiene el mensaje de seguimiento de un ejemplar específico.
-    Mensaje VerMensajesDeSeguimientoEjemplar(Ejemplar ejemplar);
-
     // Busca un mensaje específico por el ID del ejemplar.
     String buscarMensajeXEjemplar(Long id);
 

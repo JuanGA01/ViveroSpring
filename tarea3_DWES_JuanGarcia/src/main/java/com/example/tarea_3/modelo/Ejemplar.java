@@ -55,5 +55,13 @@ public class Ejemplar {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+
+	public Planta getPlanta() {
+		return planta;
+	}
+
+	public void setPlanta(Planta planta) {
+		this.planta = planta;
+	}
 	
 }
