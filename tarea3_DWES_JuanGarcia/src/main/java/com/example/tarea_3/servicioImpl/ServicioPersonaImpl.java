@@ -33,6 +33,8 @@ public class ServicioPersonaImpl implements ServicioPersona {
         } else {
             throw new RuntimeException("El correo ya está registrado: " + persona.getEmail());
         }
+        
     }
 
+    
 }

@@ -59,4 +59,12 @@ public class Credenciales {
 		this.password = password;
 	}
 	
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
+	
 }

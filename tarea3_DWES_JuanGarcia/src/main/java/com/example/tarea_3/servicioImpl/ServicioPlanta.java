@@ -46,7 +46,7 @@ public class ServicioPlanta implements com.example.tarea_3.servicio.ServicioPlan
     public Planta BuscarPlantaXId(Planta planta) {
         // Buscar una planta por su código
         return plantaRepo.findById(planta.getCodigo())
-                .orElseThrow(() -> new RuntimeException("No se encontró una planta con el código: " + planta.getCodigo()));
+                .orElseThrow(() -> new RuntimeException("No se encontró una planta con el código " + planta.getCodigo()));
     }
     
 }

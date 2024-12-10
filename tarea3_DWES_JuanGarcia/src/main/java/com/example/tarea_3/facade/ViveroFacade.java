@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.example.tarea_3.modelo.Credenciales;
@@ -225,38 +224,47 @@ public class ViveroFacade {
 	}
 
 
-	//Registro usuarios (ADMIN)
 	private void registroUsuarios() {
-		Persona nuevoUsuario = new Persona();
-		Credenciales credencialesNUsuario = new Credenciales();
-		System.out.println("Introduce el nombre: ");
-		nuevoUsuario.setNombre(scanner.nextLine());
-		do {
-			System.out.println("Introduce el correo de el nuevo usuario");
-			nuevoUsuario.setEmail(scanner.nextLine());
-			if(personaServ.CorreoExistente(nuevoUsuario)) {
-				System.out.println("Ese correo ya está registrado");
-			}
-			if(!Utilities.ValidEmail(nuevoUsuario.getEmail())) {
-				System.out.println("Correo no válido");
-			}
-		}while (!Utilities.ValidEmail(nuevoUsuario.getEmail()) || personaServ.CorreoExistente(nuevoUsuario) );
-		do {
-			System.out.println("Introduce el nombre de usuario: ");
-			credencialesNUsuario.setUsuario(scanner.nextLine());
-			if (credencialesServ.UsuarioExistente(credencialesNUsuario.getUsuario())) {
-				System.out.println("Ese nombre de usuario ya existe");
-			}
-		} while (credencialesServ.UsuarioExistente(credencialesNUsuario.getUsuario()));
-		System.out.println("Introduce la contraseña: ");
-		credencialesNUsuario.setPassword(scanner.nextLine());
-		nuevoUsuario.setCrecenciales(credencialesNUsuario);
+	    Persona nuevoUsuario = new Persona();
+	    Credenciales credencialesNUsuario = new Credenciales();
 
-		//Guardamos la persona, después vemos el id que se le ha asignado y se lo asignamos a las credenciales
-		//para mantener la coherencia en la BBDD
-		Long nuevoUsuarioID = personaServ.GuardarPersona(nuevoUsuario);
-		System.out.println(credencialesServ.GuardarCredenciales(nuevoUsuarioID, nuevoUsuario.getCrecenciales()));
+	    // Pedir datos de la persona
+	    System.out.println("Introduce el nombre: ");
+	    nuevoUsuario.setNombre(scanner.nextLine());
+
+	    do {
+	        System.out.println("Introduce el correo del nuevo usuario: ");
+	        nuevoUsuario.setEmail(scanner.nextLine());
+	        if (personaServ.CorreoExistente(nuevoUsuario)) {
+	            System.out.println("Ese correo ya está registrado.");
+	        }
+	        if (!Utilities.ValidEmail(nuevoUsuario.getEmail())) {
+	            System.out.println("Correo no válido.");
+	        }
+	    } while (!Utilities.ValidEmail(nuevoUsuario.getEmail()) || personaServ.CorreoExistente(nuevoUsuario));
+
+	    // Pedir datos de las credenciales
+	    do {
+	        System.out.println("Introduce el nombre de usuario: ");
+	        credencialesNUsuario.setUsuario(scanner.nextLine());
+	        if (credencialesServ.UsuarioExistente(credencialesNUsuario.getUsuario())) {
+	            System.out.println("Ese nombre de usuario ya existe.");
+	        }
+	    } while (credencialesServ.UsuarioExistente(credencialesNUsuario.getUsuario()));
+
+	    System.out.println("Introduce la contraseña: ");
+	    credencialesNUsuario.setPassword(scanner.nextLine());
+
+	    // Configurar la relación entre Persona y Credenciales
+	    nuevoUsuario.setCrecenciales(credencialesNUsuario);
+	    credencialesNUsuario.setPersona(nuevoUsuario);
+
+	    // Guardar la persona y sus credenciales
+	    Long nuevoUsuarioID = personaServ.GuardarPersona(nuevoUsuario);
+
+	    System.out.println("Usuario registrado con ID: " + nuevoUsuarioID);
 	}
+
 
 	
 	//Registro de nuevo tipo de planta
@@ -274,41 +282,53 @@ public class ViveroFacade {
 
 	//Insertar planta
 	private void registrarEjemplar(Persona persona) {
-		Planta planta = new Planta();
-		System.out.println("Introduce el código de la planta: ");
-		do {
-			planta = new Planta();
-			planta.setCodigo(scanner.nextLine());
-			planta = plantServ.BuscarPlantaXId(planta);
-			if (planta == null) {
-				System.out.println("Introduce un código válido: ");
-			}
-		} while (planta == null);
-		ejemplarServ.registrarNuevoEjemplar(planta , persona);
+	    Planta planta = null;
+
+	    do {
+	        System.out.println("Introduce el código de la planta: ");
+	        String codigoPlanta = scanner.nextLine();
+
+	        try {
+	            planta = plantServ.BuscarPlantaXId(new Planta(codigoPlanta, null, null));
+	        } catch (RuntimeException e) {
+	            System.out.println(e.getMessage()); // Mostrar el mensaje de error al usuario
+	            planta = null;
+	        }
+	    } while (planta == null);
+
+	    ejemplarServ.registrarNuevoEjemplar(planta, persona);
 	}
+
 
 
 	//Buscar ejemplares por tipo de planta
 	private void buscarEjemplaresXtipoDePlanta() {
-		Set<Planta> plantas = new HashSet<Planta>();
-		int pls;
-		System.out.println("Introduce cuantas plantas vas a añadir");
-		pls = Utilities.pedirEntero(scanner.nextLine(), scanner);
-		do {
-			Planta planta = new Planta();
-			System.out.println("Introduce el código de la planta: ");
-			do {
-				planta = new Planta();
-				planta.setCodigo(scanner.nextLine());
-				planta = plantServ.BuscarPlantaXId(planta);
-				if (planta == null) {
-					System.out.println("Introduce un código válido: ");
-				}
-			} while (planta == null);
-			plantas.add(planta);
-			pls = pls - 1;
-		} while (pls != 0);
-		System.out.println(ejemplarServ.listarEjemplaresPorTipoDePlanta(plantas));
+	    Set<Planta> plantas = new HashSet<>();
+	    int cantidadPlantas;
+
+	    System.out.println("Introduce cuántas plantas vas a añadir: ");
+	    cantidadPlantas = Utilities.pedirEntero(scanner.nextLine(), scanner);
+
+	    while (cantidadPlantas > 0) {
+	        Planta planta = null;
+
+	        do {
+	            System.out.println("Introduce el código de la planta: ");
+	            String codigoPlanta = scanner.nextLine();
+
+	            try {
+	                planta = plantServ.BuscarPlantaXId(new Planta(codigoPlanta, null, null));
+	            } catch (RuntimeException e) {
+	                System.out.println(e.getMessage());
+	            }
+	        } while (planta == null);
+
+	        plantas.add(planta);
+	        cantidadPlantas--;
+	    }
+
+	    System.out.println("Ejemplares asociados a los tipos de planta especificados:");
+	    System.out.println(ejemplarServ.listarEjemplaresPorTipoDePlanta(plantas));
 	}
 
 	//Ver mensaje de seguimiento de un ejemplar
@@ -350,18 +370,22 @@ public class ViveroFacade {
 
 	//Método para ver los mensajes de un tipo de planta
 	private void mensajesXPlanta() {
-		Planta planta;
-		System.out.println("Introduce el código de la planta de la que quieres ver sus mensajes: ");
-		do {
-			planta = new Planta();
-			planta.setCodigo(scanner.nextLine());
-			planta = plantServ.BuscarPlantaXId(planta);
-			if (planta == null) {
-				System.out.println("Introduce un código válido: ");
-			}
-		} while (planta == null);
-		System.out.println("Mensajes relativos a la planta " + planta.getNombreComun());
-		System.out.println(mensajeServ.listarXTipoPlanta(planta));
+	    Planta planta = null;
+
+	    do {
+	        System.out.println("Introduce el código de la planta de la que quieres ver sus mensajes: ");
+	        String codigoPlanta = scanner.nextLine();
+
+	        try {
+	            planta = plantServ.BuscarPlantaXId(new Planta(codigoPlanta, null, null));
+	        } catch (RuntimeException e) {
+	            System.out.println(e.getMessage());
+	            planta = null;
+	        }
+	    } while (planta == null);
+
+	    System.out.println("Mensajes relativos a la planta " + planta.getNombreComun());
+	    System.out.println(mensajeServ.listarXTipoPlanta(planta));
 	}
 
 
@@ -382,19 +406,23 @@ public class ViveroFacade {
 
 	//Ver los mensajes redactados por una persona
 	private void mensajesXPersona() {
-		Persona persona = new Persona();
-		System.out.println("Introduce el código de la persona de la que quieres ver sus mensajes: ");
-		do {
-			persona = new Persona();
-			persona.setId(Utilities.pedirLong(scanner.nextLine(), scanner));
-			persona = personaServ.findById(persona.getId());
-			if (persona == null) {
-				System.out.println("Introduce un código válido: ");
-			}
-		} while (persona == null);
-		System.out.println("Mensajes relativos a " + persona.getNombre());
-		System.out.println(mensajeServ.listarXPersona(persona));
+	    Persona persona = null;
+
+	    do {
+	        System.out.println("Introduce el código de la persona de la que quieres ver sus mensajes: ");
+	        Long idPersona = Utilities.pedirLong(scanner.nextLine(), scanner);
+
+	        try {
+	            persona = personaServ.findById(idPersona);
+	        } catch (RuntimeException e) {
+	            System.out.println(e.getMessage());
+	        }
+	    } while (persona == null);
+
+	    System.out.println("Mensajes relativos a " + persona.getNombre());
+	    System.out.println(mensajeServ.listarXPersona(persona));
 	}
+
 
 
 }

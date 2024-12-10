@@ -1,6 +1,7 @@
 package com.example.tarea_3.servicioImpl;
 
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.tarea_3.modelo.Credenciales;
 import com.example.tarea_3.modelo.Persona;
@@ -11,7 +12,10 @@ import com.example.tarea_3.servicio.ServicioCredenciales;
 @Service
 public class ServicioCredencialesImpl implements ServicioCredenciales {
     
+	@Autowired
     private CredencialesRepositorio credencialesRepo;
+	
+	@Autowired
     private PersonaRepositorio personaRepo;
 
     @Override
