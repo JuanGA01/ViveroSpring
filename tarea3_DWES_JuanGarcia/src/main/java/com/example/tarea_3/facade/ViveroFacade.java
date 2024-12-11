@@ -59,11 +59,11 @@ public class ViveroFacade {
 	//Menú principal
 	public void mostrarMenuGestionPrincipal() {
 		int option;
-		do {
-			System.out.println("\n---- Vivero ----");
-			System.out.println("1. Ver Plantas (Invitado)");
-			System.out.println("2. Autenticarse");
-			System.out.println("3. Salir");
+		do {	        
+			System.out.println("\n----🌱 Vivero 🌱 ----");
+			System.out.println("1. Ver Plantas (Invitado) 🌷🌹🌺🌻🌼");
+			System.out.println("2. Autenticarse 👨‍🦰👩👩‍🦰👨‍🦳👨‍");
+			System.out.println("3. Salir 👋👋👋👋👋👋");
 			System.out.print("Seleccione una opción: ");
 			option = Utilities.pedirEntero(scanner.nextLine(), scanner);
 			switch (option) {
@@ -77,7 +77,7 @@ public class ViveroFacade {
 				System.out.println("Saliendo del sistema...");
 				break;
 			default:
-				System.out.println("Opción inválida. Intente de nuevo.");
+				System.out.println("⚠️ Opción inválida, inserte un valor válido ⚠️");
 			}
 		} while (option != 3);
 		scanner.close();
@@ -89,7 +89,7 @@ public class ViveroFacade {
 		int option;
 		do {
 			System.out.println("\n---- Admin Menu ----");
-			System.out.println("1. Ver Plantas");
+			System.out.println("1. Ver Plantas 🌷🌹🌺🌻🌼");
 			System.out.println("2. Gestionar usuarios");
 			System.out.println("3. Insertar/modificar planta");
 			System.out.println("4. Salir al menú principal");

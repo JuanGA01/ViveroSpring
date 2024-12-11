@@ -19,7 +19,7 @@ public class Utilities {
             try {
                 return Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.print("Por favor, introduce un número entero: ");
+                System.out.print("❌❌ Por favor, introduce un número entero: ");
                 input = scanner.nextLine();
             }
         }
@@ -31,7 +31,7 @@ public class Utilities {
             try {
                 return Long.parseLong(input);
             } catch (NumberFormatException e) {
-                System.out.print("Por favor, introduce un número de tipo long: ");
+                System.out.print("❌❌ Por favor, introduce un número de tipo long: ");
                 input = scanner.nextLine();
             }
         }
@@ -44,9 +44,16 @@ public class Utilities {
             try {
                 return LocalDateTime.parse(input, formatter);
             } catch (DateTimeParseException e) {
-                System.out.print("Por favor, introduce una fecha y hora válida (formato: yyyy-MM-dd HH:mm): ");
+                System.out.print("❌❌ Por favor, introduce una fecha y hora válida (formato: yyyy-MM-dd HH:mm): ");
                 input = scanner.nextLine();
             }
+        }
+    }
+    
+    //Método para simular limpiar la consola
+    public static void LimpiaConsola() {
+    	for (int i = 0; i < 50; i++) {
+            System.out.println();
         }
     }
     
