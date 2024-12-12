@@ -29,11 +29,11 @@ public class ServicioEjemplarImpl implements ServicioEjemplar {
     public Ejemplar registrarNuevoEjemplar(Planta planta, Persona persona) {
         // Verificar si la planta existe
         Planta plantaExistente = plantaRepo.findById(planta.getCodigo())
-                .orElseThrow(() -> new RuntimeException("Planta no encontrada con código: " + planta.getCodigo()));
+                .orElseThrow(() -> new RuntimeException("Planta con código:" + planta.getCodigo() + " no encontrada"));
 
         // Verificar si la persona existe
         personaRepo.findById(persona.getId())
-                .orElseThrow(() -> new RuntimeException("Persona no encontrada con ID: " + persona.getId()));
+                .orElseThrow(() -> new RuntimeException("Persona con ID:" + persona.getId() + "no encontrada"));
 
         // Calcular el número secuencial para el nuevo ejemplar
         Long count = ejemplarRepo.countByPlantaCodigo(plantaExistente.getCodigo());
@@ -61,7 +61,7 @@ public class ServicioEjemplarImpl implements ServicioEjemplar {
         List<Ejemplar> ejemplares = ejemplarRepo.findByPlantaCodigoIn(codigosPlantas);
 
         if (ejemplares.isEmpty()) {
-            return "No hay ejemplares para los tipos de plantas especificados.";
+            return "No hay ejemplares para los tipos de plantas especificados";
         }
 
         // Formatear la lista de ejemplares
@@ -76,7 +76,7 @@ public class ServicioEjemplarImpl implements ServicioEjemplar {
         List<Ejemplar> ejemplares = ejemplarRepo.findAll();
 
         if (ejemplares.isEmpty()) {
-            return "No hay ejemplares registrados.";
+            return "No hay ejemplares registrados";
         }
 
         // Formatear la lista de ejemplares

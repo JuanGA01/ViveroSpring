@@ -2,6 +2,7 @@ package com.example.tarea_3.facade;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,14 +86,19 @@ public class ViveroFacade {
 
 
 	//Menú admin
-	private void menuAdmin() {
+	private void menuAdmin(Persona persona) {
 		int option;
 		do {
-			System.out.println("\n---- Admin Menu ----");
+			System.out.println("\n---- 🚷 Menu Admin 🚷 ----");
 			System.out.println("1. Ver Plantas 🌷🌹🌺🌻🌼");
-			System.out.println("2. Gestionar usuarios");
-			System.out.println("3. Insertar/modificar planta");
-			System.out.println("4. Salir al menú principal");
+			System.out.println("2. Registrar usuarios 🆕🆕👨‍🦰👩👩‍🦰👨‍🦳👨🆕🆕");
+			System.out.println("3. Insertar/modificar planta 🆕🔄🌷🌹🌺🌻🌼🔄🆕");
+			System.out.println("4. Registrar un nuevo ejemplar ➕➕🌷🌹🌺");
+			System.out.println("5. Filtrar ejemplares por tipo de planta 🌷🌹🌺🌻🌼");
+			System.out.println("6. Ver mensajes de seguimiento de un ejemplar 💬💬💬💬💬");
+			System.out.println("7. Añadir mensajes ➕💬➕💬➕");
+			System.out.println("8. Ver mensajes 💬💬💬💬💬");
+			System.out.println("9. Salir al menú principal 🔙🔙🔙🔙🔙");
 			System.out.print("Seleccione una opción: ");
 			option = Utilities.pedirEntero(scanner.nextLine(), scanner);
 			switch (option) {
@@ -106,15 +112,35 @@ public class ViveroFacade {
 				break;
 			case 3:
 				System.out.println("-----------------------------------------");
+				System.out.println("Plantas: ");
+				System.out.println(plantServ.listaPlantas());
 				insertarPlanta();
 				break;
 			case 4:
+				System.out.println("-----------------------------------------");
+				registrarEjemplar(persona);
+				break;
+			case 5:
+				System.out.println("-----------------------------------------");
+				buscarEjemplaresXtipoDePlanta();
+				break;
+			case 6:
+				System.out.println("-----------------------------------------");
+				VerMensajesSeguimientoEjemplar();
+				break;
+			case 7:
+				añadirMensajes(persona);
+				break;
+			case 8:
+				menuMensajesPersona(persona);
+				break;
+			case 9:
 				System.out.println("Regresando al menú principal...");
 				break;
 			default:
-				System.out.println("Opción inválida. Intente de nuevo.");
+				System.out.println("⚠️ Opción inválida, inserte un valor válido ⚠️");
 			}
-		} while (option != 4);
+		} while (option != 9);
 	}
 
 
@@ -123,13 +149,13 @@ public class ViveroFacade {
 		int option;
 		do {
 			System.out.println("\n---- Menu Personal ----");
-			System.out.println("1. Ver Plantas");
-			System.out.println("2. Registrar un nuevo ejemplar");
-			System.out.println("3. Filtrar ejemplares por tipo de planta");
-			System.out.println("4. Ver mensajes de seguimiento de un ejemplar");
-			System.out.println("5. Añadir mensajes");
-			System.out.println("6. Ver mensajes");
-			System.out.println("7. Salir");
+			System.out.println("1. Ver Plantas 🌷🌹🌺🌻🌼");
+			System.out.println("2. Registrar un nuevo ejemplar ➕➕🌷🌹🌺");
+			System.out.println("3. Filtrar ejemplares por tipo de planta 🌷🌹🌺🌻🌼");
+			System.out.println("4. Ver mensajes de seguimiento de un ejemplar 💬💬💬💬💬");
+			System.out.println("5. Añadir mensajes ➕💬➕💬➕");
+			System.out.println("6. Ver mensajes 💬💬💬💬💬");
+			System.out.println("7. Salir al menú principal 🔙🔙🔙🔙🔙");
 			System.out.print("Seleccione una opción: ");
 			option = Utilities.pedirEntero(scanner.nextLine(), scanner);
 			switch (option) {
@@ -159,22 +185,22 @@ public class ViveroFacade {
 				System.out.println("Regresando al menú principal...");
 				break;
 			default:
-				System.out.println("Opción inválida. Intente de nuevo.");
+				System.out.println("⚠️ Opción inválida, inserte un valor válido ⚠️");
 			}
 		} while (option != 7);
 	}
 
 
-	//Menú para listar mensajes (NO ADMINISTRADORES)
+	//Menú para listar mensajes 
 	private void menuMensajesPersona(Persona persona) {
 		int option;
 		do {
 			System.out.println("\n---- Menu Mensajes ----");
-			System.out.println("1. Ver Mensajes");
-			System.out.println("2. Ver mensajes por persona");
-			System.out.println("3. Ver mensajes por rango de fechas");
-			System.out.println("4. Ver mensajes por tipo específico de planta");
-			System.out.println("5. Salir");
+			System.out.println("1. Ver Mensajes 💬💬💬💬💬");
+			System.out.println("2. Ver mensajes por persona 👨‍🦰👩👩‍🦰👨‍🦳👨");
+			System.out.println("3. Ver mensajes por rango de fechas 📅📅📅📅📅");
+			System.out.println("4. Ver mensajes por tipo específico de planta 🌷🌹🌺🌻🌼");
+			System.out.println("5. Salir al menú del usuario 🔙🔙🔙🔙🔙");
 			System.out.print("Seleccione una opción: ");
 			option = Utilities.pedirEntero(scanner.nextLine(), scanner);
 			switch (option) {
@@ -198,7 +224,7 @@ public class ViveroFacade {
 				System.out.println("Regresando al menú principal...");
 				break;
 			default:
-				System.out.println("Opción inválida. Intente de nuevo.");
+				System.out.println("⚠️ Opción inválida, inserte un valor válido ⚠️");
 			}
 		} while (option != 5);
 	}
@@ -217,7 +243,7 @@ public class ViveroFacade {
 		String password = scanner.nextLine();
 		System.out.println(credencialesServ.loginUsuario(usuario, password));
 		if(credencialesServ.UsuarioCorrecto(usuario, password) && usuario.equals("admin")) {
-			menuAdmin();
+			menuAdmin(personaServ.findById(credencialesServ.obtenerCredencialesAutenticadas(usuario, password).getId()));
 		}else if(credencialesServ.UsuarioCorrecto(usuario, password) && !usuario.equals("admin")){          
             menuPersonal(personaServ.findById(credencialesServ.obtenerCredencialesAutenticadas(usuario, password).getId()));
 		}
@@ -230,11 +256,11 @@ public class ViveroFacade {
 
 	    // Pedir datos de la persona
 	    System.out.println("Introduce el nombre: ");
-	    nuevoUsuario.setNombre(scanner.nextLine());
+	    nuevoUsuario.setNombre(scanner.nextLine().trim());
 
 	    do {
 	        System.out.println("Introduce el correo del nuevo usuario: ");
-	        nuevoUsuario.setEmail(scanner.nextLine());
+	        nuevoUsuario.setEmail(scanner.nextLine().trim());
 	        if (personaServ.CorreoExistente(nuevoUsuario)) {
 	            System.out.println("Ese correo ya está registrado.");
 	        }
@@ -246,14 +272,29 @@ public class ViveroFacade {
 	    // Pedir datos de las credenciales
 	    do {
 	        System.out.println("Introduce el nombre de usuario: ");
-	        credencialesNUsuario.setUsuario(scanner.nextLine());
-	        if (credencialesServ.UsuarioExistente(credencialesNUsuario.getUsuario())) {
-	            System.out.println("Ese nombre de usuario ya existe.");
+	        String usuario = scanner.nextLine().trim();
+	        if (usuario.contains(" ")) {
+	            System.out.println("El nombre de usuario no puede contener espacios.");
+	            continue;
 	        }
-	    } while (credencialesServ.UsuarioExistente(credencialesNUsuario.getUsuario()));
+	        credencialesNUsuario.setUsuario(usuario);
 
-	    System.out.println("Introduce la contraseña: ");
-	    credencialesNUsuario.setPassword(scanner.nextLine());
+	        if (credencialesServ.UsuarioExistente(credencialesNUsuario.getUsuario())) {
+	            System.out.println("Ese nombre de usuario ya existe");
+	        }
+	    } while (credencialesNUsuario.getUsuario() == null || 
+	             credencialesNUsuario.getUsuario().contains(" ") || 
+	             credencialesServ.UsuarioExistente(credencialesNUsuario.getUsuario()));
+
+	    do {
+	        System.out.println("Introduce la contraseña: ");
+	        String password = scanner.nextLine().trim();
+	        if (password.contains(" ")) {
+	            System.out.println("La contraseña no puede contener espacios");
+	            continue;
+	        }
+	        credencialesNUsuario.setPassword(password);
+	    } while (credencialesNUsuario.getPassword() == null || credencialesNUsuario.getPassword().contains(" "));
 
 	    // Configurar la relación entre Persona y Credenciales
 	    nuevoUsuario.setCrecenciales(credencialesNUsuario);
@@ -266,24 +307,55 @@ public class ViveroFacade {
 	}
 
 
+
 	
-	//Registro de nuevo tipo de planta
+	// Registro de nuevo tipo de planta
 	private void insertarPlanta() {
-		Planta planta = new Planta();
-		System.out.println("Introduce el código de la planta: ");
-		planta.setCodigo(scanner.nextLine());
-		System.out.println("Introduce el nombre común de la nueva planta: ");
-		planta.setNombreComun(scanner.nextLine());
-		System.out.println("Introduce el nombre científico de la nueva planta: ");
-		planta.setNombreCientifico(scanner.nextLine());
-		System.out.println(plantServ.InsertarPlanta(planta));
+	    Planta planta = new Planta();
+
+	    // Solicitar el código de la planta
+	    String codigoPlanta;
+	    do {
+	        System.out.println("Introduce el código de la planta: ");
+	        codigoPlanta = scanner.nextLine().trim().toUpperCase();
+	        if (codigoPlanta.isEmpty() || codigoPlanta.contains(" ")) {
+	            System.out.println("El código de la planta no puede estar vacío ni contener espacios.");
+	        }
+	    } while (codigoPlanta.isEmpty() || codigoPlanta.contains(" "));
+	    planta.setCodigo(codigoPlanta);
+
+	    // Solicitar el nombre común de la planta
+	    String nombreComun;
+	    do {
+	        System.out.println("Introduce el nombre común de la nueva planta: ");
+	        nombreComun = scanner.nextLine().trim();
+	        if (nombreComun.isEmpty()) {
+	            System.out.println("El nombre común no puede estar vacío");
+	        }
+	    } while (nombreComun.isEmpty());
+	    planta.setNombreComun(nombreComun);
+
+	    // Solicitar el nombre científico de la planta
+	    String nombreCientifico;
+	    do {
+	        System.out.println("Introduce el nombre científico de la nueva planta: ");
+	        nombreCientifico = scanner.nextLine().trim();
+	        if (nombreCientifico.isEmpty()) {
+	            System.out.println("El nombre científico no puede estar vacío");
+	        }
+	    } while (nombreCientifico.isEmpty());
+	    planta.setNombreCientifico(nombreCientifico);
+
+	    // Insertar la planta y mostrar el resultado
+	    System.out.println(plantServ.InsertarPlanta(planta));
 	}
+
 
 
 	//Insertar planta
 	private void registrarEjemplar(Persona persona) {
 	    Planta planta = null;
-
+		System.out.println(plantServ.listaPlantas());
 	    do {
 	        System.out.println("Introduce el código de la planta: ");
 	        String codigoPlanta = scanner.nextLine();
@@ -297,6 +369,7 @@ public class ViveroFacade {
 	    } while (planta == null);
 
 	    ejemplarServ.registrarNuevoEjemplar(planta, persona);
+	    System.out.println("Ejemplar registrado correctamente");
 	}
 
 
@@ -305,6 +378,8 @@ public class ViveroFacade {
 	private void buscarEjemplaresXtipoDePlanta() {
 	    Set<Planta> plantas = new HashSet<>();
 	    int cantidadPlantas;
+	    
+		System.out.println(plantServ.listaPlantas());
 
 	    System.out.println("Introduce cuántas plantas vas a añadir: ");
 	    cantidadPlantas = Utilities.pedirEntero(scanner.nextLine(), scanner);
@@ -411,25 +486,40 @@ public class ViveroFacade {
 	}
 
 
-	//Ver los mensajes redactados por una persona
+	// Ver los mensajes redactados por una persona
 	private void mensajesXPersona() {
-	    Persona persona = null;
+	    List<Persona> personasDisponibles = personaServ.findAll();
+
+	    if (personasDisponibles.isEmpty()) {
+	        System.out.println("No hay personas registradas en el sistema.");
+	        return; // Salir del método si no hay personas
+	    }
+
+	    System.out.println("Personas disponibles:");
+	    personasDisponibles.forEach(persona -> 
+	        System.out.println("ID: " + persona.getId() + ", Nombre: " + persona.getNombre())
+	    );
+
+	    Persona personaSeleccionada = null;
 
 	    do {
-	        System.out.println("Introduce el código de la persona de la que quieres ver sus mensajes: ");
+	        System.out.println("Introduce el ID de la persona de la que quieres ver sus mensajes: ");
 	        Long idPersona = Utilities.pedirLong(scanner.nextLine(), scanner);
 
 	        try {
-	            persona = personaServ.findById(idPersona);
+	            personaSeleccionada = personaServ.findById(idPersona);
 	        } catch (RuntimeException e) {
 	            System.out.println(e.getMessage());
 	        }
-	    } while (persona == null);
 
-	    System.out.println("Mensajes relativos a " + persona.getNombre());
-	    System.out.println(mensajeServ.listarXPersona(persona));
+	        if (personaSeleccionada == null) {
+	            System.out.println("El ID proporcionado no corresponde a ninguna persona. Intenta nuevamente.");
+	        }
+	    } while (personaSeleccionada == null);
+
+	    System.out.println("Mensajes relativos a " + personaSeleccionada.getNombre() + ":");
+	    System.out.println(mensajeServ.listarXPersona(personaSeleccionada));
 	}
-
 
 
 }

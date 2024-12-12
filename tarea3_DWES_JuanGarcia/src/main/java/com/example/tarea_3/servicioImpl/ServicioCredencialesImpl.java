@@ -73,9 +73,10 @@ public class ServicioCredencialesImpl implements ServicioCredenciales {
 
             // Configurar la entidad Credenciales
             Credenciales credencialesNuevas = new Credenciales();
-            credencialesNuevas.setId(idPersona); // Reutiliza el ID de Persona como clave primaria
+            credencialesNuevas.setId(idPersona); 
             credencialesNuevas.setUsuario(credenciales.getUsuario());
             credencialesNuevas.setPassword(credenciales.getPassword());
+            
             // La asociación con Persona se maneja automáticamente gracias a @MapsId
             persona.setCrecenciales(credencialesNuevas);
 
@@ -91,8 +92,8 @@ public class ServicioCredencialesImpl implements ServicioCredenciales {
     @Override
     public Credenciales obtenerCredencialesAutenticadas(String usuario, String password) {
         return credencialesRepo.findByUsuario(usuario)
-                .filter(cred -> cred.getPassword().equals(password)) // Comparación directa de contraseñas
-                .orElseThrow(() -> new RuntimeException("Credenciales inválidas."));
+                .filter(cred -> cred.getPassword().equals(password))
+                .orElseThrow(() -> new RuntimeException("Credenciales inválidas"));
     }
 
     

@@ -1,6 +1,7 @@
 package com.example.tarea_3.servicioImpl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class ServicioPlanta implements com.example.tarea_3.servicio.ServicioPlan
         // Obtener todas las plantas en la base de datos
         List<Planta> plantas = plantaRepo.findAll();
         if (plantas.isEmpty()) {
-            return "No hay plantas registradas.";
+            return "No hay plantas registradas";
         }
         return plantas.stream()
                 .map(planta -> planta.getCodigo() + " - " + planta.getNombreComun())
@@ -28,13 +29,22 @@ public class ServicioPlanta implements com.example.tarea_3.servicio.ServicioPlan
     @Override
     public String InsertarPlanta(Planta planta) {
         // Verificar si ya existe una planta con el mismo código
-        if (plantaRepo.existsById(planta.getCodigo())) {
-            return "Error: Ya existe una planta con el código " + planta.getCodigo();
+        Optional<Planta> plantaExistenteOpt = plantaRepo.findById(planta.getCodigo());
+        
+        if (plantaExistenteOpt.isPresent()) {
+            // Modificar la planta existente
+            Planta plantaExistente = plantaExistenteOpt.get();
+            plantaExistente.setNombreComun(planta.getNombreComun());
+            plantaExistente.setNombreCientifico(planta.getNombreCientifico());
+            plantaRepo.save(plantaExistente); // Guardar cambios
+            return "Planta " + plantaExistente.getCodigo() + " modificada correctamente" ;
+        } else {
+            // Guardar la nueva planta
+            plantaRepo.save(planta);
+            return "Planta insertada correctamente";
         }
-        // Guardar la planta
-        plantaRepo.save(planta);
-        return "Planta insertada correctamente: " + planta.getNombreComun();
     }
+
 
     @Override
     public boolean existePlanta(Planta planta) {

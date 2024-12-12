@@ -17,6 +17,7 @@ public class DemoApplication {
         ViveroFacade portal = context.getBean(ViveroFacade.class);
         Utilities.LimpiaConsola();
         portal.mostrarMenuGestionPrincipal();
+        System.exit(0);
 	}
 
 }

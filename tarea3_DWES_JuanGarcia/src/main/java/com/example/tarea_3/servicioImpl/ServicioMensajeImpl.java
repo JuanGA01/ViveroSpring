@@ -30,17 +30,17 @@ public class ServicioMensajeImpl implements ServicioMensaje {
 	    public String crearMensaje(Persona persona, Ejemplar ejemplar, Mensaje mensaje) {
 	        // Validar que la persona y el ejemplar existen
 	        Persona personaExistente = personaRepo.findById(persona.getId())
-	                .orElseThrow(() -> new RuntimeException("Persona no encontrada con ID: " + persona.getId()));
+	                .orElseThrow(() -> new RuntimeException("Persona con ID: " + persona.getId() + " no encontrada"));
 
 	        Ejemplar ejemplarExistente = ejemplarRepo.findById(ejemplar.getId())
-	                .orElseThrow(() -> new RuntimeException("Ejemplar no encontrado con ID: " + ejemplar.getId()));
+	                .orElseThrow(() -> new RuntimeException("Ejemplar con ID: " + ejemplar.getId() + " no encontrado"));
 
 	        // Configurar y guardar el mensaje
 	        mensaje.setPersona(personaExistente);
 	        mensaje.setEjemplar(ejemplarExistente);
 	        mensajeRepo.save(mensaje);
 
-	        return "Mensaje creado correctamente.";
+	        return "Mensaje creado correctamente";
 	    }
 
 	    @Override
@@ -48,7 +48,7 @@ public class ServicioMensajeImpl implements ServicioMensaje {
 	        List<Mensaje> mensajes = mensajeRepo.findByEjemplarId(id);
 
 	        return mensajes.isEmpty()
-	                ? "No hay mensajes para el ejemplar con ID: " + id
+	                ? "No hay mensajes para el ejemplar con ID:" + id
 	                : formatMensajes(mensajes);
 	    }
 
@@ -57,7 +57,7 @@ public class ServicioMensajeImpl implements ServicioMensaje {
 	        List<Mensaje> mensajes = mensajeRepo.findAll();
 
 	        return mensajes.isEmpty()
-	                ? "No hay mensajes registrados."
+	                ? "No hay mensajes registrados"
 	                : formatMensajes(mensajes);
 	    }
 
@@ -66,7 +66,7 @@ public class ServicioMensajeImpl implements ServicioMensaje {
 	        List<Mensaje> mensajes = mensajeRepo.findByPersonaId(persona.getId());
 
 	        return mensajes.isEmpty()
-	                ? "No hay mensajes para la persona con ID: " + persona.getId()
+	                ? "No hay mensajes para la persona con ID:" + persona.getId()
 	                : formatMensajes(mensajes);
 	    }
 
@@ -75,7 +75,7 @@ public class ServicioMensajeImpl implements ServicioMensaje {
 	        List<Mensaje> mensajes = mensajeRepo.findByFechahoraBetween(desde, hasta);
 
 	        return mensajes.isEmpty()
-	                ? "No hay mensajes en el rango de fechas especificado."
+	                ? "No hay mensajes en el rango de fechas especificado"
 	                : formatMensajes(mensajes);
 	    }
 
@@ -83,21 +83,19 @@ public class ServicioMensajeImpl implements ServicioMensaje {
 	    public String listarXTipoPlanta(Planta planta) {
 	        List<Ejemplar> ejemplares = ejemplarRepo.findByPlantaCodigo(planta.getCodigo());
 	        if (ejemplares.isEmpty()) {
-	            return "No hay ejemplares para la planta con código: " + planta.getCodigo();
+	            return "No hay ejemplares para la planta con código:" + planta.getCodigo();
 	        }
 
 	        List<Mensaje> mensajes = mensajeRepo.findByEjemplarIn(ejemplares);
 	        return mensajes.isEmpty()
-	                ? "No hay mensajes para los ejemplares de la planta con código: " + planta.getCodigo()
+	                ? "No hay mensajes para los ejemplares de la planta con código:" + planta.getCodigo()
 	                : formatMensajes(mensajes);
 	    }
 
 	    // Método auxiliar para formatear mensajes
 	    private String formatMensajes(List<Mensaje> mensajes) {
 	        return mensajes.stream()
-	                .map(m -> m.getFechahora() + " - " + m.getMensaje() +
-	                        " (Ejemplar ID: " + m.getEjemplar().getId() +
-	                        ", Persona ID: " + m.getPersona().getId() + ")")
+	                .map(m -> m.getFechahora() + " - " + m.getMensaje() + " (Ejemplar ID: " + m.getEjemplar().getId() + ", Persona ID: " + m.getPersona().getId() + ")")
 	                .collect(Collectors.joining("\n"));
 	    }
 

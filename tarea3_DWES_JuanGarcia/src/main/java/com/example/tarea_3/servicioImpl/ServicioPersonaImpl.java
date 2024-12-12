@@ -1,5 +1,7 @@
 package com.example.tarea_3.servicioImpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.tarea_3.modelo.Persona;
@@ -15,7 +17,7 @@ public class ServicioPersonaImpl implements ServicioPersona {
     @Override
     public Persona findById(Long id) {
         return personaRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Persona no encontrada con ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Persona con ID:" + id + " no encontrada"));
     }
 
     @Override
@@ -31,10 +33,16 @@ public class ServicioPersonaImpl implements ServicioPersona {
             Persona personaGuardada = personaRepo.save(persona); // Guardar la entidad Persona
             return personaGuardada.getId(); // Devolver el ID de la persona guardada
         } else {
-            throw new RuntimeException("El correo ya está registrado: " + persona.getEmail());
+            throw new RuntimeException("El correo " + persona.getEmail() + " ya está registrado");
         }
         
     }
+
+	@Override
+	public List<Persona> findAll() {
+		// TODO Auto-generated method stub
+		return personaRepo.findAll();
+	}
 
     
 }

@@ -1,5 +1,7 @@
 package com.example.tarea_3.servicio;
 
+import java.util.List;
+
 import com.example.tarea_3.modelo.Persona;
 
 public interface ServicioPersona {
@@ -12,5 +14,7 @@ public interface ServicioPersona {
 
     // Guarda una nueva persona en el sistema y devuelve su ID.
     Long GuardarPersona(Persona persona);
+
+	List<Persona> findAll();
 
 }
