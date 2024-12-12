@@ -16,4 +16,7 @@ public interface EjemplarRepositorio extends JpaRepository<Ejemplar, Long> {
     // Buscar ejemplares relacionados con una lista de códigos de plantas
     List<Ejemplar> findByPlantaCodigoIn(Set<String> codigosPlantas);
     
+    // Buscar cuantos ejemplareshay a partir de un código de una planta
+	Long countByPlantaCodigo(String codigo);
+    
 }

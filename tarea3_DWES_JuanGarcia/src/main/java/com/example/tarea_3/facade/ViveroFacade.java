@@ -291,7 +291,7 @@ public class ViveroFacade {
 	        try {
 	            planta = plantServ.BuscarPlantaXId(new Planta(codigoPlanta, null, null));
 	        } catch (RuntimeException e) {
-	            System.out.println(e.getMessage()); // Mostrar el mensaje de error al usuario
+	            System.out.println(e.getMessage());
 	            planta = null;
 	        }
 	    } while (planta == null);
@@ -354,6 +354,10 @@ public class ViveroFacade {
 	private void añadirMensajes(Persona persona) {
 		Mensaje mensaje = new Mensaje();
 		Ejemplar ejemplar = new Ejemplar();
+		System.out.println();
+		System.out.println("Ejemplares: ");
+		System.out.println(ejemplarServ.listarEjemplares());
+		System.out.println("--------------------------------");
 		do {
 			System.out.println("Introduce la ID del ejemplar: ");
 			ejemplar.setId(Utilities.pedirLong(scanner.nextLine(), scanner));
@@ -371,7 +375,10 @@ public class ViveroFacade {
 	//Método para ver los mensajes de un tipo de planta
 	private void mensajesXPlanta() {
 	    Planta planta = null;
-
+	    System.out.println();
+		System.out.println("Plantas: ");
+		System.out.println(plantServ.listaPlantas());
+		System.out.println("--------------------------------");
 	    do {
 	        System.out.println("Introduce el código de la planta de la que quieres ver sus mensajes: ");
 	        String codigoPlanta = scanner.nextLine();

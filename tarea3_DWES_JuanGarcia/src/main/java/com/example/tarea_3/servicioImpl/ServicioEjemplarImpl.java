@@ -26,7 +26,7 @@ public class ServicioEjemplarImpl implements ServicioEjemplar {
     private PersonaRepositorio personaRepo;
 
     @Override
-    public boolean registrarNuevoEjemplar(Planta planta, Persona persona) {
+    public Ejemplar registrarNuevoEjemplar(Planta planta, Persona persona) {
         // Verificar si la planta existe
         Planta plantaExistente = plantaRepo.findById(planta.getCodigo())
                 .orElseThrow(() -> new RuntimeException("Planta no encontrada con código: " + planta.getCodigo()));
@@ -35,16 +35,20 @@ public class ServicioEjemplarImpl implements ServicioEjemplar {
         personaRepo.findById(persona.getId())
                 .orElseThrow(() -> new RuntimeException("Persona no encontrada con ID: " + persona.getId()));
 
-        // Crear un nuevo ejemplar
+        // Calcular el número secuencial para el nuevo ejemplar
+        Long count = ejemplarRepo.countByPlantaCodigo(plantaExistente.getCodigo());
+        Long numeroSecuencial = count + 1;
+
+        // Crear un nuevo ejemplar con el nombre generado
         Ejemplar nuevoEjemplar = new Ejemplar();
-        nuevoEjemplar.setNombre("Ejemplar de " + plantaExistente.getNombreComun());
+        nuevoEjemplar.setNombre(plantaExistente.getCodigo() + "_" + numeroSecuencial);
         nuevoEjemplar.setPlanta(plantaExistente);
 
         // Guardar el ejemplar en el repositorio
-        ejemplarRepo.save(nuevoEjemplar);
-
-        return true;
+        return ejemplarRepo.save(nuevoEjemplar);
     }
+
+
 
     @Override
     public String listarEjemplaresPorTipoDePlanta(Set<Planta> listaABuscar) {
