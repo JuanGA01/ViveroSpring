@@ -368,7 +368,15 @@ public class ViveroFacade {
 	        }
 	    } while (planta == null);
 
-	    ejemplarServ.registrarNuevoEjemplar(planta, persona);
+	    Ejemplar ejemplar = ejemplarServ.registrarNuevoEjemplar(planta, persona);
+	    
+	    Mensaje mensaje = new Mensaje();
+	    mensaje.setEjemplar(ejemplar);
+	    mensaje.setPersona(persona);
+	    mensaje.setFechahora(LocalDateTime.now());
+	    mensaje.setMensaje("El usuario " + persona.getNombre() + " ha creado este ejemplar en la fecha " + mensaje.getFechahora());
+	    mensajeServ.crearMensaje(persona, ejemplar, mensaje);
+	    
 	    System.out.println("Ejemplar registrado correctamente");
 	}
 
