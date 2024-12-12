@@ -69,6 +69,7 @@ public class ViveroFacade {
 			option = Utilities.pedirEntero(scanner.nextLine(), scanner);
 			switch (option) {
 			case 1:
+				System.out.println("-----------------------------------------");
 				System.out.println(plantServ.listaPlantas());
 				break;
 			case 2:
